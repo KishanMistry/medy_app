@@ -1,0 +1,10 @@
+{% autoescape off %}  
+Hello {% if username %}{{ username }}{% else %}There{% endif %}, <br><br>
+
+Thanks for getting started with our Medy App!<br><br>
+
+To access your account, you must require to verify your account. Click below link to verify, <br>
+
+<a href="http://{{ domain }}{% url 'activate' uidb64=uid token=token %}" target="_blank">Verify Now</a>
+  
+{% endautoescape %}
