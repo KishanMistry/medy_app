@@ -1,0 +1,42 @@
+{% extends 'template/base.html' %}
+{% block title %}Creat | {% endblock title %}
+{% block body %}
+{% load static %}
+<div class="main">
+    <div class="about_banner_img"><img src="{% static 'assets/images/create_product.svg' %}" class="img-responsive page_banner" alt=""></div>
+    <div class="about_banner_wrap">
+        <h1 class="m_11">Add Product to Sell</h1>
+    </div>
+    <div class="border"></div>
+    <div class="container">
+        <div class="panel" style="margin-top: 30px;">
+            <h2 class="tools-bootlint">Create Product</h2>
+            <div class="panel-body">
+                <div class="col-md-5">
+                    <ul class="list-group">
+                        <li class="list-group-item"><h3>Choose Category</h3></li>
+                        {% if categories %}                            
+                            {% for category in categories %}    
+                                <li class="list-group-item">
+                                    <a href="javascript:get_sub_category({{ category.id }})">{{ category }} <span>►</span></a>
+                                    {% if category.id == 1%}
+                                        <ul class="list-group" id="sub_category">
+                                            <li class="list-group-item"><a href="javascript:get_sub_category()">Test</a></li>
+                                            <li class="list-group-item"><a href="javascript:get_sub_category()">Test 12</a></li>
+                                        </ul>
+                                    {% endif %}
+                                </li>
+                            {% endfor %}
+                        {% endif %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock body %}
+<script type="javascript/text">
+var get_sub_category = function(){
+    
+}
+</script>

@@ -27,12 +27,12 @@ I have used MySQL database for this project. Create a database with the name " m
 Run below command to create migrations
 
 ```sh
-python3 manage.py makemigrations
-python3 manage.py migrate
+$ python3 manage.py makemigrations
+$ python3 manage.py migrate
 ```
 
-Once `pip3` has finished downloading the dependencies:
+Once `migration` has finished downloading the dependencies:
 ```sh
-(venv)$ python3 manage.py runserver
+$ (venv)$ python3 manage.py runserver
 ```
 And navigate to `http://127.0.0.1:8000/` in browser.

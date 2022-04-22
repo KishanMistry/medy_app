@@ -14,7 +14,10 @@ from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.contrib.auth import get_user_model
 
 def index(request):
-    return render(request, "home/home.html")
+    data =  {
+        'nbar': 'home'
+    }
+    return render(request, "home/home.html", data)
 
 
 def register_request(request):    

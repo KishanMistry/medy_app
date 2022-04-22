@@ -4,13 +4,15 @@ Author URL: http://w3layouts.com
 License: Creative Commons Attribution 3.0 Unported
 License URL: http://creativecommons.org/licenses/by/3.0/
 -->
+{% load static %}
 <!DOCTYPE HTML>
 <html>
 <head>
     <title>{% block title %}{% endblock title %} Medy App</title>
-    <link href="static/assets/css/bootstrap.css" rel='stylesheet' type='text/css' />
-    <link href="static/assets/css/style.css" rel='stylesheet' type='text/css' />
-    <link href="static/assets/css/custom.css" rel='stylesheet' type='text/css' />    
+    <!-- <link href="{% static 'assets/css/bootstrap.css' %}" rel='stylesheet' type='text/css' /> -->
+    <link href="{% static 'assets/css/bootstrap.css' %}" rel='stylesheet' type='text/css' />
+    <link href="{% static 'assets/css/style.css' %}" rel='stylesheet' type='text/css' />
+    <link href="{% static 'assets/css/custom.css' %}" rel='stylesheet' type='text/css' />    
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700,800' rel='stylesheet' type='text/css'>
@@ -18,8 +20,8 @@ License URL: http://creativecommons.org/licenses/by/3.0/
     {% block style %}{% endblock style %}
     <script
         type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
-    <script src="static/assets/js/jquery.min.js"></script>    
-    <script src="/static/assets/js/plugins/jquery.validate.min.js"></script>
+    <script src="{% static 'assets/js/jquery.min.js' %}"></script>    
+    <script src="/{% static 'assets/js/plugins/jquery.validate.min.js' %}"></script>
     {% block js %}{% endblock js %}
 </head>
 <body>
@@ -39,25 +41,26 @@ License URL: http://creativecommons.org/licenses/by/3.0/
     <div class="menu">
         <div class="container">
             <div class="logo">
-                <a href="/"><img src="static/assets/images/logo.png" alt="" /></a>
+                <a href="/"><img src="{% static 'assets/images/logo.png' %}" alt="" /></a>
             </div>
             <div class="h_menu4">
                 <!-- start h_menu4 -->
                 <a class="toggleMenu" href="#">Menu</a>
                 <ul class="nav">
-                    <li class="active"><a href="index.html">Home</a></li>
-                    <li><a href="about.html">About</a></li>
-                    <li><a href="trainers.html">Trainers</a></li>
-                    <li><a href="classes.html">Classes</a></li>
-                    <li><a href="blog.html">Blog</a></li>                    
-                    <li><a href="contact.html">Contact</a></li>
+                    {{ nbar }}
+                    <li class="{% if nbar == 'home' %}active{% endif %}"><a href="/">Home</a></li>
+                    <li class="{% if nbar == 'wanttosell' %}active{% endif %}"><a href="{% url 'product/add' %}">Want to Sell?</a></li>
+                    <li class=""><a href="trainers.html">Trainers</a></li>
+                    <li class=""><a href="classes.html">Classes</a></li>
+                    <li class=""><a href="blog.html">Blog</a></li>                    
+                    <li class=""><a href="contact.html">Contact</a></li>
                     {% if user.is_authenticated %}
-                    <li><a href="/logout">Logout</a></li>
+                        <li><a href="/logout">Logout</a></li>
                     {% else %}
-                    <li><a href="/login">Sign In</a></li>
+                        <li><a href="/login">Sign In</a></li>
                     {% endif %}
                 </ul>
-                <script type="text/javascript" src="static/assets/js/nav.js"></script>
+                <script type="text/javascript" src="{% static 'assets/js/nav.js' %}"></script>
             </div><!-- end h_menu4 -->
             <div class="clear"></div>
         </div>
@@ -80,7 +83,7 @@ License URL: http://creativecommons.org/licenses/by/3.0/
                 </div>
                 <div class="col-md-4">
                     <div class="f-logo">
-                        <img src="static/assets/images/logo.png" alt="" />
+                        <img src="{% static 'assets/images/logo.png' %}" alt="" />
                     </div>
                     <p class="m_9">Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh
                         euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam,
@@ -133,9 +136,9 @@ License URL: http://creativecommons.org/licenses/by/3.0/
     </div>    
     {% if javascripts %}
         {% for js in javascripts %}
-            <script src="/static/assets/js/{{js}}"></script>
+            <script src="{% static 'assets/js/{{js}}' %}"></script>
         {% endfor %}
     {% endif %}    
-    <script src="/static/assets/js/custom.js"></script>
+    <script src="{% static 'assets/js/custom.js' %}"></script>
 </body>
 </html>
