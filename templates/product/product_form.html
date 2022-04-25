@@ -2,6 +2,48 @@
 {% block title %}Creat | {% endblock title %}
 {% block body %}
 {% load static %}
+{% load crispy_forms_tags %}
+<script type="text/javascript">
+    var get_sub_category = function(category_id){
+        $.post("get_sub_category", { "csrfmiddlewaretoken": '{{ csrf_token }}', 'category_id': category_id}, function(response){            
+            var li ='';
+            category ='-';
+            cat_id = 0;
+            if(response.data.length > 0){
+                $.each(response.data, function(i, item){                    
+                    category = item.category;
+                    cat_id = item.cat_id;
+                    li += '<li class="list-group-item"><a href="javascript:choose_sub_category('+item.id+' ,\''+item.sub_category_name+'\')">'+item.sub_category_name+'</a></li>';
+                });
+            }else{
+                li += '<li class="list-group-item">No Sub Category found for this yet.</li>';
+            }
+            $('.sub_category').html('');
+            $('#sub_category_'+category_id).html(li)            
+            $('#category_name').html(category);
+            $('#cat_id').val(cat_id);
+            $('#sub_cat_id').val(0);
+            $('#subcategory_name').html('-');
+        },'json');
+    }
+    var choose_sub_category = function(sb_id, sb_cat){
+        $('#sub_cat_id').val(sb_id);
+        $('#subcategory_name').html(sb_cat);
+        $('.step2').removeClass('hide')
+        $('.step1').addClass('hide')
+    }
+    var change_category = function(){
+        $('.step1').removeClass('hide')
+        $('.step2').addClass('hide')
+    }
+    $(document).ready(function(){        
+        get_sub_category(1)
+        setTimeout(function(){
+            choose_sub_category(1, 'ReadyMadeScript')
+        },500)
+        
+    });
+</script>
 <div class="main">
     <div class="about_banner_img"><img src="{% static 'assets/images/create_product.svg' %}" class="img-responsive page_banner" alt=""></div>
     <div class="about_banner_wrap">
@@ -9,34 +51,87 @@
     </div>
     <div class="border"></div>
     <div class="container">
-        <div class="panel" style="margin-top: 30px;">
-            <h2 class="tools-bootlint">Create Product</h2>
+        <center><h2 class="tools-bootlint">Create Product</h2></center>
+        <div class="panel" style="margin-top: 30px;">            
             <div class="panel-body">
-                <div class="col-md-5">
-                    <ul class="list-group">
-                        <li class="list-group-item"><h3>Choose Category</h3></li>
-                        {% if categories %}                            
-                            {% for category in categories %}    
-                                <li class="list-group-item">
-                                    <a href="javascript:get_sub_category({{ category.id }})">{{ category }} <span>►</span></a>
-                                    {% if category.id == 1%}
-                                        <ul class="list-group" id="sub_category">
-                                            <li class="list-group-item"><a href="javascript:get_sub_category()">Test</a></li>
-                                            <li class="list-group-item"><a href="javascript:get_sub_category()">Test 12</a></li>
-                                        </ul>
-                                    {% endif %}
+                <form method="POST" action="" id="product-form">
+                    <div class="step1">
+                        <div class="col-md-5">                    
+                            <ul class="list-group">
+                                <li class="list-group-item"><h4>Choose Category</h4></li>
+                                {% if categories %}                            
+                                    {% for category in categories %}    
+                                        <li class="list-group-item">
+                                            <a href="javascript:get_sub_category({{ category.id }})">{{ category }} <span>►</span></a>                                    
+                                            <ul class="list-group sub_category" id="sub_category_{{ category.id }}"><!--<li class="list-group-item"><a href="javascript:get_sub_category()">Test</a></li>--></ul>
+                                        </li>
+                                    {% endfor %}
+                                {% endif %}
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="step2 hide">
+                        <div class="col-md-12">                    
+                            <h4>Selected Category</h4>
+                            <ul>
+                                <li style="list-style-type: none;"><span class="text-muted">
+                                    <span id="category_name">Categoy1</span> / 
+                                    <span id="subcategory_name">Subcategory</span></span>
+                                    {{ pr_form.category }}
+                                    {{ pr_form.category.errors }}
+                                    {{ pr_form.subcategory }}
+                                    {{ pr_form.subcategory.errors }}                                    
+                                    <a href="javascript:change_category()" style="margin-left : 8%;">Change</a>
                                 </li>
-                            {% endfor %}
-                        {% endif %}
-                    </ul>
-                </div>
+                            </ul>
+                            <hr>
+                        </div>                
+                        <div class="col-md-12">
+                            <div class="main">
+                                <div class="form-grid">
+                                    <div class="container">
+                                        {% csrf_token %}                                        
+                                        <div class="form-group">
+                                            <span>Title<label>*</label></span>
+                                            {{ pr_form.title }}
+                                            {{ pr_form.title.errors }}
+                                        </div>
+                                        <div class="form-group">
+                                            <span>Slug<label>*</label></span>
+                                            {{ pr_form.slug }}
+                                            {{ pr_form.slug.errors }}
+                                        </div>
+                                        <div class="form-group">
+                                            <span>Buying Price</span>                                            
+                                            {{ pr_form.buying_price }}
+                                            {{ pr_form.buying_price.errors }}
+                                        </div>
+                                        <div class="form-group">
+                                            <span>Selling Price<label>*</label></span>
+                                            {{ pr_form.selling_price }}
+                                            {{ pr_form.selling_price.errors }}
+                                        </div>
+                                        <div class="form-group">
+                                            <span>Buying Year<label>*</label></span>
+                                            {{ pr_form.buying_year }}
+                                            {{ pr_form.buying_year.errors }}
+                                        </div>
+                                        <div class="form-group">
+                                            <span>Description<label>*</label></span>
+                                            {{ pr_form.description }}
+                                            {{ pr_form.description.errors }}
+                                        </div>
+                                        <div class="clear"></div>
+                                        <br>
+                                        <input type="submit" name="Submit" class="button" value="Save">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
 </div>
 {% endblock body %}
-<script type="javascript/text">
-var get_sub_category = function(){
-    
-}
-</script>

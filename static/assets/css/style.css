@@ -3396,7 +3396,7 @@ fieldset.input input[type="submit"]:hover {
 .button1 input[type="submit"]:hover {
 	background:#555;
 }
-.register-top-grid h3, .register-bottom-grid h3 {
+.register-top-grid h3, .register-bottom-grid h3, .form-grid h3 {
 	color:#00BFF0;
 	font-size: 1em;
 	padding-bottom: 5px;
@@ -3407,17 +3407,30 @@ fieldset.input input[type="submit"]:hover {
 	float: left;
 	margin: 10px 0;
 }
-.register-top-grid span, .register-bottom-grid span {
+.form-grid {
+	width: 92%;
+	float: left;
+	margin: 10px 0;
+}
+.register-top-grid span, .register-bottom-grid span, .form-grid span {
 	color:#555;
 	font-size: 0.85em;
 	padding-bottom: 0.2em;
 	display: block;
 	text-transform: uppercase;
 }
-.register-top-grid input[type="text"], .register-bottom-grid input[type="text"], .register-top-grid input[type="password"], input[type="email"] {
+.register-top-grid input[type="text"], .register-bottom-grid input[type="text"], .register-top-grid input[type="password"], input[type="email"]{
 	border: 1px solid #EEE;
 	outline-color:#00BFF0;
 	width: 96%;
+	font-size: 1em;
+	padding: 0.5em;
+	font-family: 'Open Sans', sans-serif;
+}
+.form-grid input[type="text"], textarea {
+	border: 1px solid #EEE;
+	outline-color:#00BFF0;
+	width: 92%;
 	font-size: 1em;
 	padding: 0.5em;
 	font-family: 'Open Sans', sans-serif;
@@ -3493,8 +3506,8 @@ fieldset.input input[type="submit"]:hover {
 .news-letter:hover {
 	color:#00BFF0;
 }
-.register-grids form input[type="submit"] {
-	background:#E25050;
+.register-grids form input[type="submit"], .form-grid input[type="submit"] {
+	background:#00BFF0;
 	color: #FFF;
 	font-size: 0.8em;
 	padding:0.8em 2.2em;
@@ -3508,8 +3521,10 @@ fieldset.input input[type="submit"]:hover {
 	cursor: pointer;
 	outline: none;
 	text-transform: uppercase;
+	font-weight: 600;
+	font-size: 15px;
 }
-.register-grids form input[type="submit"]:hover {
+.register-grids form input[type="submit"]:hover , .form-grid input[type="submit"]:hover {
 	background:#555;
 }
 .register-grids{

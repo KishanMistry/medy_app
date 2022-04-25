@@ -21,7 +21,7 @@ License URL: http://creativecommons.org/licenses/by/3.0/
     <script
         type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
     <script src="{% static 'assets/js/jquery.min.js' %}"></script>    
-    <script src="/{% static 'assets/js/plugins/jquery.validate.min.js' %}"></script>
+    <script src="{% static 'assets/js/plugins/jquery.validate.min.js' %}"></script>
     {% block js %}{% endblock js %}
 </head>
 <body>
@@ -46,8 +46,7 @@ License URL: http://creativecommons.org/licenses/by/3.0/
             <div class="h_menu4">
                 <!-- start h_menu4 -->
                 <a class="toggleMenu" href="#">Menu</a>
-                <ul class="nav">
-                    {{ nbar }}
+                <ul class="nav">                    
                     <li class="{% if nbar == 'home' %}active{% endif %}"><a href="/">Home</a></li>
                     <li class="{% if nbar == 'wanttosell' %}active{% endif %}"><a href="{% url 'product/add' %}">Want to Sell?</a></li>
                     <li class=""><a href="trainers.html">Trainers</a></li>

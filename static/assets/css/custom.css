@@ -6,4 +6,4 @@ input.error{ outline-color: #d73746 !important; border: 1px solid #EEE !importan
 .page_banner{ width: 100%; height: 200px; }
 .list-group a span{ float: right; }
 .list-group a { display: block; }
-ul#sub_category { position: absolute; margin-left: 96.6%; width: 100%; top: -3%; }
+ul.sub_category { position: absolute; margin-left: 96.6%; width: 100%; top: -3%; }

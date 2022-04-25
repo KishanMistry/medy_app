@@ -6,8 +6,8 @@ class Category(models.Model):
     category_name = models.CharField(max_length=100, null=False, unique=True)
     description = models.TextField(max_length=600, null=True)
     image = models.ImageField(upload_to='category', null=True)
-    created_at = models.DateField(auto_now_add=True)
-    modified_at = models.DateField(auto_now=True)
+    created_at = models.DateTimeField(auto_now_add=True, blank=True)
+    modified_at = models.DateTimeField(auto_now=True, blank=True)
 
     def __str__(self):
         return self.category_name
@@ -26,8 +26,8 @@ class Subcategory(models.Model):
     sub_category_name = models.CharField(max_length=100, null=False, unique=True)
     category = models.ForeignKey( Category, related_name="Subcategory", on_delete=models.CASCADE )
     description = models.TextField(max_length=500, null=True)
-    created_at = models.DateField(auto_now_add=True)
-    modified_at = models.DateField(auto_now=True)
+    created_at = models.DateTimeField(auto_now_add=True, blank=True)
+    modified_at = models.DateTimeField(auto_now=True, blank=True)
 
     def __str__(self):
         return self.sub_category_name
