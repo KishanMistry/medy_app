@@ -1,7 +1,13 @@
 {% extends 'template/base.html' %}
-{% block title %}Creat | {% endblock title %}
-{% block body %}
 {% load static %}
+{% block title %}Creat | {% endblock title %}
+{% block style %}
+    <link rel="stylesheet" href="{% static 'assets/css/dropzone.css' %}" />    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/4.2.0/min/dropzone.min.js"></script>
+
+{% endblock style %}
+{% block body %}
+
 {% load crispy_forms_tags %}
 <script type="text/javascript">
     var get_sub_category = function(category_id){
@@ -10,7 +16,7 @@
             category ='-';
             cat_id = 0;
             if(response.data.length > 0){
-                $.each(response.data, function(i, item){                    
+                $.each(response.data, function(i, item){
                     category = item.category;
                     cat_id = item.cat_id;
                     li += '<li class="list-group-item"><a href="javascript:choose_sub_category('+item.id+' ,\''+item.sub_category_name+'\')">'+item.sub_category_name+'</a></li>';
@@ -19,7 +25,7 @@
                 li += '<li class="list-group-item">No Sub Category found for this yet.</li>';
             }
             $('.sub_category').html('');
-            $('#sub_category_'+category_id).html(li)            
+            $('#sub_category_'+category_id).html(li)
             $('#category_name').html(category);
             $('#cat_id').val(cat_id);
             $('#sub_cat_id').val(0);
@@ -37,12 +43,23 @@
         $('.step2').addClass('hide')
     }
     $(document).ready(function(){        
-        get_sub_category(1)
-        setTimeout(function(){
-            choose_sub_category(1, 'ReadyMadeScript')
-        },500)
-        
+        // get_sub_category(1)
+        // setTimeout(function(){
+        //     choose_sub_category(1, 'ReadyMadeScript')
+        // },500)
+
+        /* Dropzone.autoDiscover = false;  
+        var myDropzone = new Dropzone(".dropzone", { 
+            maxFilesize: 2,
+            acceptedFiles: ".jpeg,.jpg,.png,.gif",
+            autoProcessQueue: false,
+        });
+        $('#uploadFile').click(function(){
+            myDropzone.processQueue();
+        }); */
     });
+    
+
 </script>
 <div class="main">
     <div class="about_banner_img"><img src="{% static 'assets/images/create_product.svg' %}" class="img-responsive page_banner" alt=""></div>
@@ -54,9 +71,9 @@
         <center><h2 class="tools-bootlint">Create Product</h2></center>
         <div class="panel" style="margin-top: 30px;">            
             <div class="panel-body">
-                <form method="POST" action="" id="product-form">
+                <form method="POST" action="" id="product-form" enctype="multipart/form-data">
                     <div class="step1">
-                        <div class="col-md-5">                    
+                        <div class="col-md-5">    
                             <ul class="list-group">
                                 <li class="list-group-item"><h4>Choose Category</h4></li>
                                 {% if categories %}                            
@@ -69,7 +86,7 @@
                                 {% endif %}
                             </ul>
                         </div>
-                    </div>
+                    </div>                    
                     <div class="step2 hide">
                         <div class="col-md-12">                    
                             <h4>Selected Category</h4>
@@ -94,7 +111,7 @@
                                         <div class="form-group">
                                             <span>Title<label>*</label></span>
                                             {{ pr_form.title }}
-                                            {{ pr_form.title.errors }}
+                                            {{ pr_form.title.errors }}                                            
                                         </div>
                                         <div class="form-group">
                                             <span>Slug<label>*</label></span>
@@ -120,7 +137,11 @@
                                             <span>Description<label>*</label></span>
                                             {{ pr_form.description }}
                                             {{ pr_form.description.errors }}
-                                        </div>
+                                        </div> 
+                                        <div class="form-group">
+                                            <span>Images<label>*</label></span>
+                                            <input type="file" name="images" multiple/>
+                                        </div>                                        
                                         <div class="clear"></div>
                                         <br>
                                         <input type="submit" name="Submit" class="button" value="Save">
@@ -130,6 +151,16 @@
                         </div>
                     </div>
                 </form>
+                <!-- <div class="step3">
+                    <div class="col-md-12">                    
+                        <h4>Upload Product Images</h4>
+                        <div class="form-group">
+                            <form action="" enctype="multipart/form-data" class="dropzone" id="image-upload">                            
+                            <center><h4>Upload Multiple Image By Click on below area</h4></center>
+                            </form>
+                        </div>
+                    </div>    
+                </div> -->
             </div>
         </div>
     </div>

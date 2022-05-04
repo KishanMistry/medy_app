@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.contrib import admin
-from product.models import Category, Product
+from product.models import Category, Product, Productimage, Subcategory
 from django.utils.html import escape
 from django.utils.html import format_html
 
@@ -14,3 +14,5 @@ from django.utils.html import format_html
 # admin.site.register(Category, AdminCategory)
 admin.site.register(Category)
 admin.site.register(Product)
+admin.site.register(Productimage)
+admin.site.register(Subcategory)

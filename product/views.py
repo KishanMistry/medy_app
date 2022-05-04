@@ -1,15 +1,31 @@
+import code
+from email.policy import default
+from itertools import product
+from math import prod
 from unicodedata import category
+from wsgiref.util import request_uri
 from django.contrib.auth.decorators import login_required
 from django.http import Http404, HttpResponse, JsonResponse
 from django.shortcuts import redirect, render
-from product.models import Category, Subcategory, Product
+from product.models import Category, Subcategory, Product, Productimage
 from product.forms import productForm
 from django.contrib import messages
+from django.db.models import FilteredRelation, Q, F
 
 # Create your views here.
 def index(request):
-    data = Product.objects.all()
-    return render(request, 'product/product_list.html', {'products' : data})
+    # ################## Inner join ################
+    # product_image = Productimage.objects.filter(default = 1, product__user_id = request.user.id)
+    # context = { 'nbar' : 'myproducts', 'data' : product_image }
+    # return render(request, 'product/product_list.html', context)
+
+    # ################## Left Outer join ################
+    product_image = Product.objects.filter(user_id = request.user.id).annotate(
+            pi=FilteredRelation('Productimage', condition=Q(Productimage__default=1)),
+            pi_pic=F('pi__image_name')
+        )    
+    context = { 'nbar' : 'myproducts', 'data' : product_image }
+    return render(request, 'product/product_list.html', context)
 
 @login_required
 def create_request(request):
@@ -17,14 +33,22 @@ def create_request(request):
     if request.method == "POST":
         form = productForm(request.POST)
         if form.is_valid():            
-            form = form.save(commit=False)            
-            form.save()
-            messages.success( request, "Product created successfully..!", extra_tags="alert-success")
-            return redirect("product")
+            pr_form = form.save(commit=False)
+            pr_form.user = request.user
+            pr_form.save()
+            images = request.FILES.getlist('images')            
+            for i, image in enumerate(images):
+                if(i == 0): 
+                    default = 1
+                else:
+                    default = 0
+                Productimage.objects.create( image_name=image, product = pr_form, default = default )
+            messages.success( request, "Product created successfully..!", extra_tags="alert-success")            
+            return redirect('product')
     else:
         form = productForm() 
     all_category = Category.objects.all()
-    data={ 'nbar':nbar, 'categories': all_category, 'pr_form' : form }    
+    data={ 'nbar':nbar, 'categories': all_category, 'pr_form' : form }
     return render(request, 'product/product_form.html', data)
 
 @login_required
@@ -42,4 +66,18 @@ def get_sub_category(request):
     return JsonResponse({
         'status': 'success',
         'data': [{'id': sc.id, 'sub_category_name': sc.sub_category_name, 'category': sc.category.category_name, 'cat_id': sc.category.id} for sc in sub_categories],
-    })
+    })   
+
+# Edit code
+# if(slug):
+#         try:
+#             if Product.objects.filter(slug = slug).exists():                
+#                 form = productForm() 
+#                 all_category = Category.objects.all()
+#                 data={ 'nbar':nbar, 'categories': all_category, 'pr_form' : form }    
+#                 return render(request, 'product/product_form.html', data)
+#             else:
+#                 messages.error( request, "Invalid request made.", extra_tags="alert-danger")
+#                 return redirect('product')
+#         except ObjectDoesNotExist:
+#             return HttpResponse('error')
