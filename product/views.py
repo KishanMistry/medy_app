@@ -20,7 +20,7 @@ def index(request):
     # return render(request, 'product/product_list.html', context)
 
     # ################## Left Outer join ################
-    product_image = Product.objects.filter(user_id = request.user.id).annotate(
+    product_image = Product.objects.filter(user_id = request.user.id).annotate( 
             pi=FilteredRelation('Productimage', condition=Q(Productimage__default=1)),
             pi_pic=F('pi__image_name')
         )    
@@ -36,7 +36,7 @@ def create_request(request):
             pr_form = form.save(commit=False)
             pr_form.user = request.user
             pr_form.save()
-            images = request.FILES.getlist('images')            
+            images = request.FILES.getlist('images')
             for i, image in enumerate(images):
                 if(i == 0): 
                     default = 1

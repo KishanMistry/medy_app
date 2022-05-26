@@ -3,17 +3,17 @@
 {% block body %}
 <div class="main">
     <div class="login_top">
-        <div class="container">                
-            <div class="col-md-6 col-md-offset-3">                    
+        <div class="container">
+            <div class="col-md-6 col-md-offset-3">
                 <div class="login-page">
                     <div class="login-title">
                         <h4 class="title">Registered Users</h4>
-                        <div id="loginbox" class="loginbox">                                
+                        <div id="loginbox" class="loginbox">
                             <form id="login-form" action="/login" method="post">
                                 {% csrf_token %}
                                 <fieldset class="input">
                                     <p id="login-form-username">
-                                        <label for="modlgn_username">Username</label>                                            
+                                        <label for="modlgn_username">Username</label>
                                         <input id="username" type="text" name="username" class="inputbox" size="18" autocomplete="off" value='kishan' autofocus>
                                     </p>
                                     <p id="login-form-password">
@@ -27,13 +27,14 @@
                                                 <label for="modlgn_remember"><a href="#">Forgot Your Password ?</a></label>
                                             </div>
                                             <div class="col-md-6 text-right">
-                                                <label for="modlgn_remember"><a href="register">Create an account ?</a></label>                                                
+                                                <label for="modlgn_remember"><a href="register">Create an account ?</a></label>
                                             </div>
-                                        </p>                                        
+                                        </p>
                                     </div>  <br>
                                     <div class="">
                                         <input type="submit" name="Submit" class="button" value="Login">
                                         <div class="clear"></div>
+                                        <a href="http://127.0.0.1:8000/accounts/google/login/" _blank="true">Google+</a>
                                     </div>                                  
                                 </fieldset>
                             </form>

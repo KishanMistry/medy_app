@@ -2,6 +2,7 @@ from django import forms
 from django.forms import ModelForm
 from product.models import Category, Subcategory, Product
 from django.contrib.auth.models import User
+
 # Product form.
 class productForm(ModelForm):
     title = forms.CharField(required=True)

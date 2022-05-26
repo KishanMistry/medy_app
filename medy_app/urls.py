@@ -18,6 +18,10 @@ from django.urls import path, include
 from django.conf.urls.static import static
 from django.conf import settings
 from . import views
+from django.contrib import admin
+
+admin.autodiscover()
+admin.site.enable_nav_sidebar = False
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -26,7 +30,12 @@ urlpatterns = [
     path("login", views.login_request, name="login"),
     path("logout", views.logout_request, name="logout"),
     path('activate/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/', views.activate, name='activate'),
-    path("product", include('product.urls'))
+    path("product", include('product.urls')),
+    
+    path('accounts/', include('allauth.urls')),     
+
+
+
     
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
