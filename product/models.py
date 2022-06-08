@@ -1,7 +1,7 @@
 from django.utils.html import format_html
 from django.db import models
 from django.contrib.auth.models import User
-
+from django.utils.text import slugify
 
 class Category(models.Model):
     category_name = models.CharField(max_length=100, null=False, unique=True)
@@ -15,7 +15,7 @@ class Category(models.Model):
 
     class Meta:
         db_table = 'categories'
-
+    
     def image_tag(self):
         return format_html('<img src="{url}" width="{width}" height={height} />'.format(url=self.image.url, width='60px', height='60px'))
 
@@ -45,10 +45,10 @@ class Subcategory(models.Model):
 
 class Product(models.Model):
     title = models.CharField(max_length=100, null=False)
-    slug = models.SlugField(max_length=120, unique=True)
+    slug = models.SlugField(default='',editable=False,max_length= 150,)
     category = models.ForeignKey(Category, related_name="product_category", on_delete=models.CASCADE)
     subcategory = models.ForeignKey(Subcategory, related_name="product_sub_category", on_delete=models.CASCADE)
-    description = models.CharField(max_length=100, null=False)
+    description = models.CharField(max_length=600, null=False)
     buying_price = models.FloatField(default=0)
     selling_price = models.FloatField(default=0)
     buying_year = models.IntegerField(null=True)
@@ -56,20 +56,39 @@ class Product(models.Model):
     created_at = models.DateField(auto_now_add=True)
     modified_at = models.DateField(auto_now=True)
 
+    def _generate_slug(self):
+        import itertools
+        max_length = self._meta.get_field('slug').max_length
+        value = self.title
+        slug_candidate = slug_original = slugify(value, allow_unicode=True)
+        for i in itertools.count(1):
+            if not Product.objects.filter(slug=slug_candidate).exists():
+                break
+            slug_candidate = '{}-{}'.format(slug_original, i)
+
+        self.slug = slug_candidate
+
     def __str__(self):
         return self.title
+
+    def save(self, *args, **kwargs):
+        if not self.pk:
+            self._generate_slug()
+
+        super().save(*args, **kwargs)
 
     class Meta:
         db_table = 'products'
 
 
 class Productimage(models.Model):
-    PLACEHOLDER= (
+    PLACEHOLDER = (
         ('Main Product Image', 'Main Product Image'),
         ('Sub Img 1', 'Sub Img 1'),
         ('Sub Img 2', 'Sub Img 2'),
     )
-    product = models.ForeignKey(Product, related_name="Productimage", on_delete=models.CASCADE)
+    product = models.ForeignKey(
+        Product, related_name="Productimage", on_delete=models.CASCADE)
     image_name = models.ImageField(upload_to='product')
     default = models.CharField(max_length=20, choices=PLACEHOLDER)
     created_at = models.DateField(auto_now_add=True)

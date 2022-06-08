@@ -34,7 +34,7 @@ def create_request(request):
         form = productForm(request.POST)
         if form.is_valid():            
             pr_form = form.save(commit=False)
-            pr_form.user = request.user
+            pr_form.user = request.user            
             pr_form.save()
             images = request.FILES.getlist('images')
             for i, image in enumerate(images):
@@ -44,7 +44,7 @@ def create_request(request):
                     default = 0
                 Productimage.objects.create( image_name=image, product = pr_form, default = default )
             messages.success( request, "Product created successfully..!", extra_tags="alert-success")            
-            return redirect('product')
+            return redirect('product')        
     else:
         form = productForm() 
     all_category = Category.objects.all()

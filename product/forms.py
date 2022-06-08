@@ -5,8 +5,7 @@ from django.contrib.auth.models import User
 
 # Product form.
 class productForm(ModelForm):
-    title = forms.CharField(required=True)
-    slug = forms.SlugField(required=True)
+    title = forms.CharField(required=True)    
     description = forms.CharField(widget=forms.Textarea(attrs={"rows":3}), required=True)
     buying_price = forms.CharField(required=False)
     selling_price = forms.CharField(required=True)
@@ -16,4 +15,4 @@ class productForm(ModelForm):
     
     class Meta:
         model = Product
-        fields = ["title", "slug", "category", "subcategory", "description", "buying_price", "selling_price", "buying_year"]
+        fields = ["title", "category", "subcategory", "description", "buying_price", "selling_price", "buying_year"]
