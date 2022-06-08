@@ -68,16 +68,29 @@ def get_sub_category(request):
         'data': [{'id': sc.id, 'sub_category_name': sc.sub_category_name, 'category': sc.category.category_name, 'cat_id': sc.category.id} for sc in sub_categories],
     })   
 
-# Edit code
-# if(slug):
-#         try:
-#             if Product.objects.filter(slug = slug).exists():                
-#                 form = productForm() 
-#                 all_category = Category.objects.all()
-#                 data={ 'nbar':nbar, 'categories': all_category, 'pr_form' : form }    
-#                 return render(request, 'product/product_form.html', data)
-#             else:
-#                 messages.error( request, "Invalid request made.", extra_tags="alert-danger")
-#                 return redirect('product')
-#         except ObjectDoesNotExist:
-#             return HttpResponse('error')
+def product_edit(request, slug):
+    nbar = 'myproducts'   
+    try:
+        product = Product.objects.get(slug = slug, user_id = request.user.id)
+        if request.method == "POST":            
+            form = productForm(request.POST, instance=product)
+            if form.is_valid():
+                pr_form = form.save(commit=False)
+                pr_form.user = request.user            
+                pr_form.save()
+                images = request.FILES.getlist('images')
+                for i, image in enumerate(images):
+                    if(i == 0): 
+                        default = 1
+                    else:
+                        default = 0
+                    Productimage.objects.create( image_name=image, product = pr_form, default = default )
+                messages.success( request, "Product Updated successfully..!", extra_tags="alert-success")            
+                return redirect('product')
+        else:        
+            form = productForm(instance=product)        
+        all_category = Category.objects.all()
+        data={ 'nbar':nbar, 'categories': all_category, 'pr_form' : form, 'action':'edit', 'product':product }
+        return render(request, 'product/product_form.html', data)        
+    except Product.DoesNotExist:
+        raise Http404

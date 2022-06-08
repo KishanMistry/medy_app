@@ -6,7 +6,8 @@ from django.conf import settings
 
 urlpatterns = [    
     path("", views.index, name='product'),
-    path("/edit/<slug:slug>", views.index, name='product/edit'),
+    # path("/edit/<slug:slug>", views.index, name='product/edit'),
     path("/add", views.create_request, name='product/add'),
-    path("/get_sub_category", views.get_sub_category, name='product/get_sub_category'),    
+    path("/get_sub_category", views.get_sub_category, name='get-sub-category'),    
+    path("/edit/<slug:slug>", views.product_edit, name='product-edit'),
 ]
